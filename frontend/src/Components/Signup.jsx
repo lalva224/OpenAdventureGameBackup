@@ -9,8 +9,8 @@ export function ChooseSignUpOrSignIn(){
     console.log('in choose')
    return (
     <>
-    <div className="text-center">
-    <p>Welcome to Adventue Game!</p>
+    <div className="text-center home-background h-screen">
+    <p className="home-header">Welcome to Adventue Game!</p>
     <div className="flex justify-around">
         <Button onClick={()=>navigate('/signup')} variant="primary">Click here for SignUp</Button>
         <Button onClick = {()=>navigate('/signin')}variant="primary">Click here for SignIn</Button>
@@ -23,6 +23,7 @@ export function SignUp(){
     const navigate = useNavigate()
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
+    const [displayError,setDisplayError] = useState(false)
     const handleSubmit = async (event)=>{
         event.preventDefault();
        let data = {
@@ -30,43 +31,53 @@ export function SignUp(){
             'password':password
         }
         console.log(data)
-        let response = await api.post('users/signup/',data)
-        
-        if(response.status==200){
+        try{
+            let response = await api.post('users/signup/',data)
+
             const {token}= response.data
             console.log(token)
-           localStorage.setItem('token',token)
-           //for all future requests
+            localStorage.setItem('token',token)
+            //for all future requests
             api.defaults.headers.common['Authorization'] = `Token ${token}`
             navigate('/play')
         }
-        else if(response.status==500){
-            return <p>User already exists!</p>
-        }
+    catch(error){
+        setDisplayError(true)
+        setTimeout(()=>{
+            setDisplayError(false)
+        },3000)
+    }
+        
     }
     
     return (
         <>
-        <h1 className="text-center">Sign up!!</h1>
-        <div className="text-center flex justify-center">
-            
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicUsername">
-            <Form.Label>Username</Form.Label>
-            <Form.Control onChange={(e)=>setUsername(e.target.value)} type="username" placeholder="Enter username" />
-            <Form.Text className="text-muted">
-                We'll never share your username with anyone else.
-            </Form.Text>
-            </Form.Group>
+        <div className="signup-background h-screen">
+            <h1 className="text-center">Sign up!!</h1>
+            <div className="text-center flex justify-center">
+                
+                    <Form>
+                        <Form.Group className="mb-3" controlId="formBasicUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control onChange={(e)=>setUsername(e.target.value)} type="username" placeholder="Enter username" />
+                <Form.Text className="text-muted">
+                    We'll never share your username with anyone else.
+                </Form.Text>
+                </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
-            </Form.Group>
-            <Button onClick={handleSubmit} variant="primary" type="submit">
-            Submit
-            </Button>
-        </Form>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
+                </Form.Group>
+                <Button onClick={handleSubmit} variant="primary" type="submit">
+                Submit
+                </Button>
+            </Form>
+            </div>
+            {
+                displayError &&
+                <p className="text-red-500 font-bold text-center">User already exists</p>
+            }
         </div>
         </>
     )
@@ -76,6 +87,7 @@ export function SignIn(){
     const navigate = useNavigate()
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
+    const [displayError,setDisplayError] = useState(false)
 
     const handleSubmit = async (event)=>{
         event.preventDefault()
@@ -86,41 +98,50 @@ export function SignIn(){
         console.log(data)
         //if we're logged out we will be under a different token. Get rid of this header and allow for a new token to be created.
         api.defaults.headers.common['Authorization'] = null
-        let response = await api.post('users/login/',data)
-        console.log(response.data)
-        const {token} = response.data
-        console.log(token)
-        localStorage.setItem('token',token)
-        api.defaults.headers.common['Authorization'] = `token ${token}`
-        if(response.status==200){
+        try{
+            let response = await api.post('users/login/',data)
+            const {token} = response.data
+            localStorage.setItem('token',token)
+            api.defaults.headers.common['Authorization'] = `token ${token}`
             navigate('/play')
+            
         }
-        else{
-            return <p>User Not found!</p>
+        catch(error){
+            setDisplayError(true)
+            setTimeout(()=>{
+                setDisplayError(false)
+            },3000)
         }
+  
     }
     return (
         <>
-        <h1 className="text-center">Sign In!!</h1>
-        <div className="text-center flex justify-center">
-            
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicUsername">
-            <Form.Label>Username</Form.Label>
-            <Form.Control onChange={(e)=>setUsername(e.target.value)} type="username" placeholder="Enter username" />
-            <Form.Text className="text-muted">
-                We'll never share your username with anyone else.
-            </Form.Text>
-            </Form.Group>
+        <div className="signup-background h-screen">
+            <h1 className="text-center">Sign In!!</h1>
+            <div className="text-center flex justify-center">
+                
+                    <Form>
+                        <Form.Group className="mb-3" controlId="formBasicUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control onChange={(e)=>setUsername(e.target.value)} type="username" placeholder="Enter username" />
+                <Form.Text className="text-muted">
+                    We'll never share your username with anyone else.
+                </Form.Text>
+                </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
-            </Form.Group>
-            <Button onClick={handleSubmit} variant="primary" type="submit">
-            Submit
-            </Button>
-        </Form>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
+                </Form.Group>
+                <Button onClick={handleSubmit} variant="primary" type="submit">
+                Submit
+                </Button>
+            </Form>
+        </div>
+        {
+            displayError &&
+            <p className="text-red-500 font-bold text-center">User does not exist!</p>
+        }
         </div>
         </>
     )

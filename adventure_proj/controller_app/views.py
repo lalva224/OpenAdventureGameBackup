@@ -17,8 +17,6 @@ import requests
 import io
 from PIL import Image
 import time
-from google.cloud import storage
-from google.oauth2 import service_account
 from django.http import JsonResponse
 import json
 import boto3

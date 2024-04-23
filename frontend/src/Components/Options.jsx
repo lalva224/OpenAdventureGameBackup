@@ -1,8 +1,13 @@
 import React from "react";
 import {api} from '../utilities'
 import { useState } from "react";
-const Option = ({text,setChatHistory,setIsLoading})=>{
+const Option = ({text,setChatHistory,setIsLoading,isLoading,pendingImage})=>{
+    const [violatesSafety,setViolatesSafety] = useState(false)
     const handleDecision = async (event)=>{
+        if(isLoading || pendingImage){
+            console.log('disabled')
+            return
+        }
         event.preventDefault();
         let data= {
             'prompt':text
@@ -16,7 +21,12 @@ const Option = ({text,setChatHistory,setIsLoading})=>{
             setChatHistory(response.data)
         }
         catch(error){
-            console.log(error)
+            setIsLoading(false)
+            setViolatesSafety(true)
+            console.log('Safety!!')
+            setTimeout(()=>{
+                setViolatesSafety(false)
+            },3000)
         }
         
         
@@ -24,9 +34,13 @@ const Option = ({text,setChatHistory,setIsLoading})=>{
     }
 return(
     <>
-    <div onClick= {handleDecision} className="option-background h-[3.5rem] text-black mb-8 hover:cursor-pointer">
+    <div onClick= {handleDecision} className={`option-background min-h-[3.5rem] text-black mb-8 mx-[2rem] ${!isLoading && !pendingImage? 'hover:cursor-pointer' : '' }`}>
         <p>{text}</p>
     </div>
+    {
+          violatesSafety && 
+          <p className="text-center text-red-500 font-bold">Gemini flags this for safety.Sorry!</p>
+        }
     </>
 )
 }
