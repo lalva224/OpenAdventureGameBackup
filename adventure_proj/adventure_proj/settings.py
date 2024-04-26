@@ -29,8 +29,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['http://ec2-18-212-35-86.compute-1.amazonaws.com']
 
 # Application definition
 
@@ -52,10 +52,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'SIMPLE_JWT': {
-        'ACCESS_TOKEN_LIFETIME': timedelta(hours=5),  # Example: Token expires after 15 minutes
-        # Other optional settings like refresh token lifetime, etc.
-    }
+
 }
 
 MIDDLEWARE = [
@@ -69,9 +66,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:5173'
-# ]
+    # CORS_ALLOWED_ORIGINS = [
+    #     'http://localhost:5173'
+    # ]
 
 CORS_ALLOW__ALL_ORIGINS = True
 
