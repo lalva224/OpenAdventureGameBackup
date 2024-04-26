@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['http://ec2-18-212-35-86.compute-1.amazonaws.com']
+CSRF_TRUSTED_ORIGINS = ['https://openadventure.duckdns.org/']
 
 # Application definition
 
