@@ -27,11 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["https://openadventure.duckdns.org/"]
-CSRF_TRUSTED_ORIGINS = ['https://openadventure.duckdns.org/']
-
+ALLOWED_HOSTS = ["*"]
+# CSRF_TRUSTED_ORIGINS = ['https://openadventure.duckdns.org/']
+CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -70,7 +70,7 @@ MIDDLEWARE = [
     #     'http://localhost:5173'
     # ]
 
-CORS_ALLOW__ALL_ORIGINS = True
+
 
 ROOT_URLCONF = 'adventure_proj.urls'
 
