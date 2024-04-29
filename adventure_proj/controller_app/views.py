@@ -133,7 +133,7 @@ class get_Image(APIView):
         current_message = chat_history.number_of_messages
         imagery = chat.history[current_message+1].parts[0].text
         print('\n\n\n\n',imagery,'\n\n\n\n')
-
+        #
 
         #send imagery to DALLE
         client = OpenAI(api_key=os.getenv('CHAT_KEY'))
