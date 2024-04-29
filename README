@@ -1,0 +1,10 @@
+I cannot share my API keys here or in a .env file because some of my APIs get destroyed once it is detected that they are in github.
+Below are instructions to get this project running.
+
+1) I have shared my .env in my dev post, please create a .env file and place the contents of my .env inside, within root directory.
+2) In root directory create a virtual environment: python -m venv myenv  (python is alias for python3)
+3) activate virtual environment: source myenv/bin/activate
+4) Go to backend firectory (adventure_proj) and install all dependencies: pip install -r requirements.txt
+5) Run backend server: python manage.py runserver
+6) Go to front end directory and install all dependencies: npm install
+7) Run front end server : npm run dev
